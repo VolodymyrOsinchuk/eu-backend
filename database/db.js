@@ -14,8 +14,7 @@ const connectDB = async () => {
       useUnifiedTopology: true,
     })
     .then((con) => {
-      console.log(con.connection.host);
-      console.log("DB connection successful");
+      console.log(`DB connection successful in host ${con.connection.host}`);
     })
     .catch((err) => {
       console.log("DB connection error: " + err.message);

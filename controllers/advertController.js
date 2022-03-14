@@ -1,5 +1,36 @@
 const Advert = require("../models/advertModel");
 
+class APIFeatures {
+  constructor(query, queryString) {
+    this.query = query;
+    this.queryString = queryString;
+  }
+
+  filter() {
+    // 1A) Filtering
+    const queryObj = { ...this.queryString };
+    const excludedFields = ["page", "sort", "limit", "fields"];
+    excludedFields.forEach((el) => delete queryObj[el]);
+
+    // 1B) advenced filtering
+    let queryStr = JSON.stringify(queryObj);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+
+    // let query = Advert.find(JSON.parse(queryStr))
+    this.query.find(JSON.parse(queryStr));
+  }
+
+  sort() {
+    if (this.quetyString.sort) {
+      const sortBy = this.quetyString.sort.split(",").join(" ");
+      console.log("sortBy", sortBy);
+      this.query = this.query.sort(sortBy);
+    } else {
+      this.query = this.query.sort("-createdAt");
+    }
+  }
+}
+
 const createAdvert = async (req, res) => {
   try {
     const advert = await Advert.create(req.body);
@@ -21,28 +52,68 @@ const createAdvert = async (req, res) => {
 const getAllAdverts = async (req, res) => {
   try {
     // BUILD QUERY
-    const queryObj = { ...req.query };
-    const excludedFields = ["page", "sort", "limit", "fields"];
-    excludedFields.forEach((el) => delete queryObj[el]);
-    console.log("req.query", req.query);
-    // console.log("queryObj", queryObj);
+    // // 1A) Filtering
+    //   console.log("req.query", req.query);
+    //   const queryObj = { ...req.query };
+    //   const excludedFields = ["page", "sort", "limit", "fields"];
+    //   excludedFields.forEach((el) => delete queryObj[el]);
+    //   // console.log("queryObj", queryObj);
 
+    //   // 1B) advenced filtering
+    //   let queryStr = JSON.stringify(queryObj);
+    //   console.log("queryStr", queryStr);
+    //   queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+    //   console.log("queryStr parse", JSON.parse(queryStr));
     // { price: { gte: '5' } }
     // { price: { $gte: 5}}
     // 1 methode
-    const query = await Advert.find(queryObj)
-      .populate("user", "username email")
-      .populate("category", "name");
+    // let query = Advert.find(JSON.parse(queryStr))
+    //   .populate("user", "username email")
+    //   .populate("category", "name");
+
+    // 2) Sorting
+    // if (req.query.sort) {
+    //   const sortBy = req.query.sort.split(",").join(" ");
+    //   console.log("sortBy", sortBy);
+    //   query = query.sort(sortBy);
+    // } else {
+    //   query = query.sort("-createdAt");
+    // }
+
+    // 3) Field limiting
+    if (req.query.sort) {
+      const fields = req.query.fields.split(",").join(" ");
+      console.log("sortBy", sortBy);
+      query = query.select(fields);
+    } else {
+      query = query.select("-__v");
+    }
+
+    // 4) Pagination
+    const page = req.query.page * 1 || 1;
+    const limit = req.query.limit * 1 || 10;
+    const skip = (page - 1) * limit;
+
+    query = query.skip(skip).limit(limit);
+
+    if (req.query.page) {
+      const numAdvert = await Advert.countDocuments();
+      if (skip >= numAdvert) throw new Error("Ця сторінка не існує");
+    }
+
     // EXECUTE QUERY
-    const adverts = query;
+    const features = new APIFeatures(
+      Advert.find()
+        .populate("user", "username email")
+        .populate("category", "name"),
+      req.query
+    )
+      .filter()
+      .sort();
+    const adverts = await features.query;
 
     // 2 mathode
     // const adverts = await Advert.find().where("title").equals("advert one");
-
-    // advenced filtering
-    let queryStr = JSON.stringify(queryObj);
-    console.log("queryStr", queryStr);
-    // queryStr = queryStr.replace(/\/)
 
     // SEND RESPONSE
     return res.status(200).json({
@@ -54,7 +125,8 @@ const getAllAdverts = async (req, res) => {
     console.log("get all adverts error is: ", err.message);
     res.status(404).json({
       status: "fail",
-      message: err,
+      message: err.message,
+      error: err,
     });
   }
 };

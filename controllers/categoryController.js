@@ -1,15 +1,15 @@
-const User = require("../models/userModel");
+const Category = require("../models/categoryModele");
 
-const createUser = async (req, res) => {
+const createCategory = async (req, res) => {
   try {
-    const user = await User.create(req.body);
+    const category = await Category.create(req.body);
 
     return res.status(201).json({
       status: "success",
-      user,
+      category,
     });
   } catch (err) {
-    console.log("create user error is: ", err);
+    console.log("create category error is: ", err);
     res.status(400).json({
       status: "fail",
       message: "надіслані недійсні дані",
@@ -19,5 +19,5 @@ const createUser = async (req, res) => {
 };
 
 module.exports = {
-  createUser,
+  createCategory,
 };

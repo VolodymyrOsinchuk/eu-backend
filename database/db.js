@@ -12,6 +12,7 @@ const connectDB = async () => {
       useCreateIndex: true,
       useFindAndModify: false,
       useUnifiedTopology: true,
+      autoIndex: true,
     })
     .then((con) => {
       console.log(`DB connection successful in host ${con.connection.host}`);

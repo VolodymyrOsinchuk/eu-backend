@@ -13,9 +13,20 @@ const advertSchema = new mongoose.Schema(
     },
     category: {
       type: mongoose.Schema.ObjectId,
-      ref: "Category"
+      ref: "Category",
     },
-    images: [String]
+    images: [String],
+    status: {
+      type: Boolean,
+      default: false,
+    },
+    price: {
+      type: Number,
+    },
+    user: {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+    },
   },
   { timestamps: true }
 );

@@ -31,6 +31,10 @@ const advertSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: "Country",
     },
+    city: {
+      type: mongoose.Schema.ObjectId,
+      ref: "City",
+    },
   },
   { timestamps: true }
 );

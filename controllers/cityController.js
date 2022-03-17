@@ -1,15 +1,15 @@
-const Category = require("../models/categoryModele");
+const City = require("../models/cityModel");
 
-const createCategory = async (req, res) => {
+const createCity = async (req, res) => {
   try {
-    const category = await Category.create(req.body);
+    const city = await City.create(req.body);
 
     return res.status(201).json({
       status: "success",
-      category,
+      city,
     });
   } catch (err) {
-    console.log("create category error is: ", err);
+    console.log("create city error is: ", err);
     res.status(400).json({
       status: "fail",
       message: "надіслані недійсні дані",
@@ -18,16 +18,18 @@ const createCategory = async (req, res) => {
   }
 };
 
-const getAllCategory = async (req, res) => {
+const getAllCity = async (req, res) => {
   try {
-    const categories = await Category.find().select("-__v");
+    const cities = await City.find()
+      .select("-__v")
+      .populate("country", "_id name");
 
     return res.status(201).json({
       status: "success",
-      categories,
+      cities,
     });
   } catch (err) {
-    console.log("all categories error is: ", err);
+    console.log("all cities error is: ", err);
     res.status(400).json({
       status: "fail",
       message: "надіслані недійсні дані",
@@ -37,6 +39,6 @@ const getAllCategory = async (req, res) => {
 };
 
 module.exports = {
-  createCategory,
-  getAllCategory,
+  createCity,
+  getAllCity,
 };

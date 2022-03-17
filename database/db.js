@@ -7,7 +7,7 @@ const DB = process.env.DATABASE.replace(
 
 const connectDB = async () => {
   await mongoose
-    .connect(process.env.DATABASE, {
+    .connect(process.env.DATABASE_LOCAL, {
       useNewUrlParser: true,
       useCreateIndex: true,
       useFindAndModify: false,

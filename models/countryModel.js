@@ -6,11 +6,6 @@ const countrySchema = new mongoose.Schema({
     required: [true, "Назва країни обовязкова"],
     unique: true,
   },
-  city: {
-    type: String,
-    required: [true, "Назва міста обовязкова"],
-    unique: true,
-  },
 });
 
 const Country = mongoose.model("Country", countrySchema);

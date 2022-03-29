@@ -1,42 +1,25 @@
 const City = require("../models/cityModel");
+const catchAsync = require("../utils/catchAsync");
 
-const createCity = async (req, res) => {
-  try {
-    const city = await City.create(req.body);
+const createCity = catchAsync(async (req, res, next) => {
+  const city = await City.create(req.body);
 
-    return res.status(201).json({
-      status: "success",
-      city,
-    });
-  } catch (err) {
-    console.log("create city error is: ", err);
-    res.status(400).json({
-      status: "fail",
-      message: "надіслані недійсні дані",
-      error: err,
-    });
-  }
-};
+  return res.status(201).json({
+    status: "success",
+    city,
+  });
+});
 
-const getAllCity = async (req, res) => {
-  try {
-    const cities = await City.find()
-      .select("-__v")
-      .populate("country", "_id name");
+const getAllCity = catchAsync(async (req, res, next) => {
+  const cities = await City.find()
+    .select("-__v")
+    .populate("country", "_id name");
 
-    return res.status(201).json({
-      status: "success",
-      cities,
-    });
-  } catch (err) {
-    console.log("all cities error is: ", err);
-    res.status(400).json({
-      status: "fail",
-      message: "надіслані недійсні дані",
-      error: err,
-    });
-  }
-};
+  return res.status(201).json({
+    status: "success",
+    cities,
+  });
+});
 
 module.exports = {
   createCity,

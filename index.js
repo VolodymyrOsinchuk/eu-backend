@@ -8,7 +8,9 @@ const userRouter = require("./routes/userRoutes");
 const categoryRouter = require("./routes/categoryRoutes");
 const countryRouter = require("./routes/countryRoutes");
 const cityRouter = require("./routes/cityRoutes");
+const globalErrorHandlers = require("./controllers/errorController");
 
+const AppError = require("./utils/appEror");
 const app = express();
 // console.log(app.get("env"));
 
@@ -29,6 +31,21 @@ app.use("/api/v1/users", userRouter);
 app.use("/api/v1/categories", categoryRouter);
 app.use("/api/v1/countries", countryRouter);
 app.use("/api/v1/cities", cityRouter);
+
+app.all("*", (req, res, next) => {
+  // res.status(404).json({
+  //   status: "невдача",
+  //   message: `не можу знайти ${req.originalUrl} на цьому сервері`,
+  // });
+
+  // const err = new Error(`не можу знайти ${req.originalUrl} на цьому сервері`);
+  // err.status = "fail";
+  // err.statusCode = 404;
+
+  next(new AppError(`не можу знайти ${req.originalUrl} на цьому сервері`, 404));
+});
+
+app.use(globalErrorHandlers);
 
 // START SERVER
 const port = 5000 || process.env.PORT;

@@ -1,6 +1,7 @@
 const Advert = require("../models/advertModel");
 const APIFeatures = require("../utils/apiFeatures.js");
 const catchAsync = require("../utils/catchAsync");
+const AppError = require("../utils/appEror");
 
 const createAdvert = catchAsync(async (req, res, next) => {
   const advert = await Advert.create(req.body);
@@ -122,7 +123,14 @@ const getAdvert = catchAsync(async (req, res, next) => {
     .populate("country", "name")
     .lean()
     .exec();
-  return res.status(200).json({
+
+  if (!advert) {
+    return next(
+      new AppError("Оголошення з цим ідентифікатором не знайдено", 404)
+    );
+  }
+
+  res.status(200).json({
     status: "success",
     advert,
   });
@@ -152,6 +160,13 @@ const updateAdvert = catchAsync(async (req, res, next) => {
   })
     .lean()
     .exec();
+
+  if (!advert) {
+    return next(
+      new AppError("Оголошення з цим ідентифікатором не знайдено", 404)
+    );
+  }
+
   return res.status(200).json({
     status: "success",
     advert,
@@ -160,7 +175,12 @@ const updateAdvert = catchAsync(async (req, res, next) => {
 
 const deleteAdvert = catchAsync(async (req, res, next) => {
   const { id } = req.params;
-  await Advert.findByIdAndDelete(id).lean().exec();
+  const advert = await Advert.findByIdAndDelete(id).lean().exec();
+
+  if (!advert) {
+    return next(new AppError("Оголошення з цим ідентифікатором не знайдено", 404));
+   }
+
   return res.status(200).json({
     status: "success",
     message: "Avert deleted",

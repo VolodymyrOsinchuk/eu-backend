@@ -32,7 +32,7 @@ class APIFeatures {
   }
 
   limitFirlds() {
-    if (this.queryString.sort) {
+    if (this.queryString.fields) {
       const fields = this.queryString.fields.split(",").join(" ");
       // console.log("sortBy", sortBy);
       this.query = this.query.select(fields);

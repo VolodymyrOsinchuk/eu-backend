@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "package-name": "git+https://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:x-oauth-basic@github.com:VolodymyrOsinchuk/eu-backend.git",
   "scripts": {
     "start": "nodemon",
     "start:prod": "NODE_ENV=production nodemon",

@@ -49,6 +49,7 @@ app.use(globalErrorHandlers);
 
 // START SERVER
 const port = 5000 || process.env.PORT;
+
 app.listen(port, () => {
   console.log(`Server sterted on port ${port}`);
 });

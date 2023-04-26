@@ -7,13 +7,7 @@ const DB = process.env.DATABASE.replace(
 
 const connectDB = async () => {
   await mongoose
-    .connect(process.env.DATABASE, {
-      useNewUrlParser: true,
-      useCreateIndex: true,
-      useFindAndModify: false,
-      useUnifiedTopology: true,
-      // autoIndex: true,
-    })
+    .connect(process.env.DATABASE)
     .then((con) => {
       console.log(`DB connection successful in host ${con.connection.host}`);
     })

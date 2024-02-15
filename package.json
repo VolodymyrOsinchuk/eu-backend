@@ -5,26 +5,27 @@
   "main": "index.js",
   "package-name": "git+https://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:x-oauth-basic@github.com:VolodymyrOsinchuk/eu-backend.git",
   "scripts": {
-    "start": "nodemon",
+    "start": "node index.js",
     "start:prod": "NODE_ENV=production nodemon",
+    "start:dev": "nodemon",
     "debug": "ndb index.js"
   },
   "keywords": [],
   "author": "Volodymyr Osinchuk",
   "license": "ISC",
   "dependencies": {
-    "countries-list": "^2.6.1",
-    "dotenv": "^16.0.3",
+    "countries-list": "^3.0.6",
+    "dotenv": "^16.4.4",
     "express": "^4.18.2",
-    "mongoose": "^7.1.0",
+    "mongoose": "^8.1.2",
     "morgan": "^1.10.0",
     "slugify": "^1.6.6"
   },
   "devDependencies": {
     "ndb": "^1.1.5",
-    "nodemon": "^2.0.22"
+    "nodemon": "^3.0.3"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=20.0.0"
   }
 }

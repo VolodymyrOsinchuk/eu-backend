@@ -9,10 +9,10 @@ const connectDB = async () => {
   await mongoose
     .connect(DB)
     .then((con) => {
-      console.log(`DB connection successful in host ${con.connection.host}`);
+      console.log(`Успішне підключення до БД на хості ${con.connection.host}`);
     })
     .catch((err) => {
-      console.log("DB connection error: " + err.message);
+      console.log("Помилка підключення до БД: " + err.message);
     });
 };
 

@@ -5,16 +5,15 @@ class APIFeatures {
   }
 
   filter() {
-    // 1A) Filtering
+    // 1A) Фільтрування
     const queryObj = { ...this.queryString };
     const excludedFields = ["page", "sort", "limit", "fields"];
     excludedFields.forEach((el) => delete queryObj[el]);
 
-    // 1B) advenced filtering
+    // 1B) розширене фільтрування
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
 
-    // let query = Advert.find(JSON.parse(queryStr))
     this.query.find(JSON.parse(queryStr));
     return this;
   }
@@ -22,7 +21,7 @@ class APIFeatures {
   sort() {
     if (this.queryString.sort) {
       const sortBy = this.queryString.sort.split(",").join(" ");
-      // console.log("sortBy", sortBy);
+      // console.log("сортування за", sortBy);
       this.query = this.query.sort(sortBy);
     } else {
       this.query = this.query.sort("-createdAt");
@@ -34,7 +33,6 @@ class APIFeatures {
   limitFirlds() {
     if (this.queryString.fields) {
       const fields = this.queryString.fields.split(",").join(" ");
-      // console.log("sortBy", sortBy);
       this.query = this.query.select(fields);
     } else {
       this.query = this.query.select("-__v");
